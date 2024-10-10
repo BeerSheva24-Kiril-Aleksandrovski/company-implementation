@@ -2,6 +2,10 @@ package telran.employees;
 
 import telran.io.Persistable;
 
+import java.io.BufferedReader;
+import java.io.FileReader;
+import java.io.IOException;
+import java.io.PrintWriter;
 import java.util.*;
 
 public class CompanyImpl implements Company, Persistable {
@@ -104,14 +108,29 @@ public class CompanyImpl implements Company, Persistable {
 
     @Override
     public void saveToFile(String fileName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'saveToFile'");
+        try {
+            PrintWriter writer = new PrintWriter(fileName);
+            for (Employee empl : employees.values()) {
+                writer.println(empl.toString());
+            }
+            writer.close();
+        } catch (Exception e) {
+            e.getMessage();
+        }
     }
 
     @Override
     public void restoreFromFile(String fileName) {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'restoreFromFile'");
+        try {
+            BufferedReader reader = new BufferedReader(new FileReader(fileName));
+            String line;
+            while ((line = reader.readLine()) != null) {
+                Employee empl = Employee.getEmployeeFromJSON(line);
+                addEmployee(empl);
+            }
+            reader.close();
+        } catch (IOException e) {
+            e.getMessage();
+        }
     }
-
 }

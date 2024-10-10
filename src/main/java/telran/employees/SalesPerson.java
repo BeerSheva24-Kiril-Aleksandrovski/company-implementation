@@ -22,11 +22,15 @@ public class SalesPerson extends WageEmployee {
 
     @Override
     protected void fillJSON(JSONObject jsonObj) {
-        // TODO
+        super.fillJSON(jsonObj);
+        jsonObj.put("percent", percent);
+        jsonObj.put("sales", sales);
     }
 
     @Override
     protected void setObject(JSONObject jsonObj) {
-        // TODO
+        super.setObject(jsonObj);
+        percent = jsonObj.getFloat("percent");
+        sales = jsonObj.getLong("sales");
     }
 }
