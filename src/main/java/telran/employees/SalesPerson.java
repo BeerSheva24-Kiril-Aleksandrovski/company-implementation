@@ -12,6 +12,6 @@ public class SalesPerson extends WageEmployee{
 
     @Override
     public int computeSalary() {
-        return super.computeSalary() + (int)(percent * sales); 
+        return (int)(super.computeSalary() + percent * sales / 100); 
     }
 }

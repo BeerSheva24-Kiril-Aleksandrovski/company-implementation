@@ -4,11 +4,12 @@ public class Employee {
     private long id;
     private int basicSalary;
     private String department;
+
     public Employee(long id, int basicSalary, String department) {
         this.id = id;
         this.basicSalary = basicSalary;
         this.department = department;
-    }  
+    }
 
     public int computeSalary() {
         return basicSalary;
@@ -20,5 +21,14 @@ public class Employee {
 
     public String getDepartment() {
         return department;
+    }
+
+    @Override
+    public boolean equals(Object obj) {
+        boolean res = false;
+        if (obj instanceof Employee empl) {
+            res = id == empl.id;
+        }
+        return res;
     }
 }
