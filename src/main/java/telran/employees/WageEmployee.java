@@ -20,6 +20,16 @@ public class WageEmployee extends Employee {
         return super.computeSalary() + wage * hours;
     }
 
+    
+    public int getWage() {
+        return wage;
+    }
+    
+    public int getHours() {
+        return hours;
+    }
+    
+
     @Override
     protected void fillJSON(JSONObject jsonObj) {
         super.fillJSON(jsonObj);

@@ -48,6 +48,10 @@ public class Employee {
         return department;
     }
 
+    public int getBasicSalary() {
+        return basicSalary;
+    }
+
     @Override
     public boolean equals(Object obj) {
         boolean res = false;
