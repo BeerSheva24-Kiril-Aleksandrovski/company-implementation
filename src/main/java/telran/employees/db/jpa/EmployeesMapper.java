@@ -1,13 +1,15 @@
 package telran.employees.db.jpa;
 
+import java.lang.reflect.Constructor;
+
 import org.json.JSONObject;
+
 import telran.employees.Employee;
 
 public class EmployeesMapper {
     private static final String PACKAGE = "telran.employees.";
     private static final String CLASS_NAME = "className";
-    private static final String ENTITY = "Entity";
-    private static final String ENTITIES_PACKAGE = "telran.employee.db.jpa.";
+    private static final String PACKAGE_JPA = PACKAGE + "db." + "jpa.";
 
     public static Employee toEmployeeDtoFromEntity(EmployeeEntity entity) {
         String entityClassName = entity.getClass().getSimpleName();
@@ -19,16 +21,17 @@ public class EmployeesMapper {
     }
 
     public static EmployeeEntity toEmployeeEntityFromDto(Employee empl) {
-        String dtoClassName = empl.getClass().getSimpleName();
-        String entityClassName = ENTITIES_PACKAGE + dtoClassName + ENTITY;
+        String entityClassName = PACKAGE_JPA + empl.getClass().getSimpleName() + "Entity";
         try {
+            @SuppressWarnings("unchecked")
             Class<EmployeeEntity> clazz = (Class<EmployeeEntity>) Class.forName(entityClassName);
-            EmployeeEntity entity = clazz.getConstructor().newInstance();
-            entity.fromEmployeeDto(empl);
-            return entity;
+            Constructor<EmployeeEntity> constructor = clazz.getConstructor();
+            EmployeeEntity resEntity = constructor.newInstance();
+            resEntity.fromEmployeeDto(empl);
+            return resEntity;
+
         } catch (Exception e) {
             throw new RuntimeException(e);
         }
     }
-
 }

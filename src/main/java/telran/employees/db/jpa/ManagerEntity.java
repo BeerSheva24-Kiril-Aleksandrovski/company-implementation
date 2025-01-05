@@ -7,6 +7,7 @@ import telran.employees.Manager;
 
 
 @Entity
+@DiscriminatorValue("Manager")
 public class ManagerEntity extends EmployeeEntity {
     private float factor;
 
