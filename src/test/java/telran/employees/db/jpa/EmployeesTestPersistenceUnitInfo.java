@@ -14,8 +14,6 @@ public class EmployeesTestPersistenceUnitInfo extends EmployeesPersistenceUnitIn
         ds.setPassword("");
         ds.setUsername("sa");
         ds.setDriverClassName("org.h2.Driver");
-
         return ds;
     }
-
 }

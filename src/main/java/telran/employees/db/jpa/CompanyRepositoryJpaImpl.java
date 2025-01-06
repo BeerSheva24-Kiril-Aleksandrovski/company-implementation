@@ -7,6 +7,7 @@ import jakarta.persistence.*;
 import jakarta.persistence.spi.PersistenceProvider;
 import jakarta.persistence.spi.PersistenceUnitInfo;
 import telran.employees.Employee;
+import telran.employees.Manager;
 import telran.employees.db.CompanyRepository;
 
 public class CompanyRepositoryJpaImpl implements CompanyRepository {
@@ -45,9 +46,11 @@ public class CompanyRepositoryJpaImpl implements CompanyRepository {
         var transaction = em.getTransaction();
         try {
             transaction.begin();
+
             var emplEntity = em.find(EmployeeEntity.class, empl.getId());
             if (emplEntity != null) {
-                throw new IllegalStateException("Employee already exist");
+                throw new IllegalStateException("Employee already exists");
+
             }
             EmployeeEntity employee = EmployeesMapper.toEmployeeEntityFromDto(empl);
             em.persist(employee);
@@ -56,12 +59,13 @@ public class CompanyRepositoryJpaImpl implements CompanyRepository {
             transaction.rollback();
             throw e;
         }
+
     }
 
     @Override
     public Employee findEmployee(long id) {
-        EmployeeEntity empllEntity = em.find(EmployeeEntity.class, em);
-        return empllEntity == null ? null : EmployeesMapper.toEmployeeDtoFromEntity(empllEntity);
+        EmployeeEntity emplEntity = em.find(EmployeeEntity.class, id);
+        return emplEntity == null ? null : EmployeesMapper.toEmployeeDtoFromEntity(emplEntity);
     }
 
     @Override
@@ -69,13 +73,13 @@ public class CompanyRepositoryJpaImpl implements CompanyRepository {
         EntityTransaction transaction = em.getTransaction();
         try {
             transaction.begin();
-            EmployeeEntity employeeEntity = em.find(EmployeeEntity.class, id);
-            if (employeeEntity == null) {
-                throw new NoSuchElementException("Employee does not exist");
+            EmployeeEntity emplEntity = em.find(EmployeeEntity.class, id);
+            if (emplEntity == null) {
+                throw new NoSuchElementException("Employee doesn't exist");
             }
-            em.remove(employeeEntity);
+            em.remove(emplEntity);
             transaction.commit();
-            return EmployeesMapper.toEmployeeDtoFromEntity(employeeEntity);
+            return EmployeesMapper.toEmployeeDtoFromEntity(emplEntity);
         } catch (Exception e) {
             transaction.rollback();
             throw e;
@@ -96,4 +100,15 @@ public class CompanyRepositoryJpaImpl implements CompanyRepository {
         TypedQuery<String> query = em.createQuery("select distinct department from EmployeeEntity", String.class);
         return query.getResultList();
     }
+
+    @Override
+    public List<Manager> findManagersWithMaxFactor() {
+        TypedQuery<ManagerEntity> query = em.createQuery(
+                "select mng from ManagerEntity mng where factor = (select max(factor) from ManagerEntity )",
+                ManagerEntity.class);
+        List<ManagerEntity> managers = query.getResultList();
+        return managers.stream().map(EmployeesMapper::toEmployeeDtoFromEntity)
+                .map(e -> (Manager) e).toList();
+    }
+
 }

@@ -1,7 +1,6 @@
 package telran.employees;
 
 import static org.junit.jupiter.api.Assertions.*;
-import telran.io.Persistable;
 
 import java.util.Arrays;
 import java.util.Iterator;
@@ -9,6 +8,8 @@ import java.util.NoSuchElementException;
 
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+
+import telran.io.Persistable;
 
 public class CompanyTest {
 	private static final long ID1 = 123;
@@ -38,6 +39,7 @@ public class CompanyTest {
 
 	@BeforeEach
 	protected void setCompany() {
+
 		for (Employee empl : new Employee[] { empl1, empl2, empl3 }) {
 			company.addEmployee(empl);
 		}
@@ -156,4 +158,5 @@ public class CompanyTest {
 			runTestIterator(comp);
 		}
 	}
+
 }

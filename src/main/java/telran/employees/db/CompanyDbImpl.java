@@ -1,11 +1,37 @@
 package telran.employees.db;
 
-import java.util.*;
+import java.util.ArrayList;
+import java.util.Iterator;
+import java.util.List;
 
 import telran.employees.*;
 
 public class CompanyDbImpl implements Company {
     private CompanyRepository repository;
+
+    private class CompanyDbIterator implements Iterator<Employee> {
+
+        Iterator<Employee> iterator = new ArrayList<>(repository.getEmployees()).iterator();
+        Employee prev;
+
+        @Override
+        public boolean hasNext() {
+            return iterator.hasNext();
+        }
+
+        @Override
+        public Employee next() {
+            prev = iterator.next();
+            return prev;
+        }
+
+        @Override
+        public void remove() {
+            iterator.remove();
+            removeEmployee(prev.getId());
+        }
+
+    }
 
     public CompanyDbImpl(CompanyRepository repository) {
         this.repository = repository;
@@ -13,7 +39,7 @@ public class CompanyDbImpl implements Company {
 
     @Override
     public Iterator<Employee> iterator() {
-        return repository.getEmployees().iterator();
+        return new CompanyDbIterator();
     }
 
     @Override
@@ -40,12 +66,13 @@ public class CompanyDbImpl implements Company {
     @Override
     public String[] getDepartments() {
         List<String> listDepartments = repository.findDepartments();
-                return listDepartments.toArray(String[]::new);
+        return listDepartments.toArray(String[]::new);
     }
 
     @Override
     public Manager[] getManagersWithMostFactor() {
-        // TODO Auto-generated method stub
-        throw new UnsupportedOperationException("Unimplemented method 'getManagersWithMostFactor'");
+        List<Manager> managersList = repository.findManagersWithMaxFactor();
+        return managersList.toArray(Manager[]::new);
     }
+
 }

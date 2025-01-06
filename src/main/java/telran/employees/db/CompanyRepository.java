@@ -1,7 +1,9 @@
 package telran.employees.db;
 
-import telran.employees.*;
 import java.util.List;
+
+import telran.employees.Employee;
+import telran.employees.Manager;
 
 public interface CompanyRepository {
     List<Employee> getEmployees();
@@ -15,4 +17,6 @@ public interface CompanyRepository {
     List<Employee> getEmployeesByDepartment(String department);
 
     List<String> findDepartments();
+
+    List<Manager> findManagersWithMaxFactor();
 }
