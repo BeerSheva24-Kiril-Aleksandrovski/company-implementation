@@ -25,6 +25,5 @@ public class EmployeesInitialJpaTest {
     void getEmployeesTest() {
         Company company = new CompanyDbImpl(repository);
         company.forEach(System.out::println);
-
     }
 }

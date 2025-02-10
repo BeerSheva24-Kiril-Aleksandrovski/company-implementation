@@ -3,11 +3,13 @@ package telran.employees;
 import org.json.JSONObject;
 
 public class Employee {
+    static final String PACKAGE = "telran.employees.";
     private long id;
     private int basicSalary;
     private String department;
 
     public Employee() {
+
     }
 
     @SuppressWarnings("unchecked")
@@ -15,7 +17,7 @@ public class Employee {
         JSONObject jsonObj = new JSONObject(jsonStr);
         String className = jsonObj.getString("className");
         try {
-            Class<Employee> clazz = (Class<Employee>) Class.forName(className);
+            Class<Employee> clazz = (Class<Employee>) Class.forName(PACKAGE + className);
             Employee empl = clazz.getConstructor().newInstance();
             empl.setObject(jsonObj);
             return empl;
@@ -64,7 +66,7 @@ public class Employee {
     @Override
     public String toString() {
         JSONObject jsonObj = new JSONObject();
-        jsonObj.put("className", getClass().getName());
+        jsonObj.put("className", getClass().getSimpleName());
         fillJSON(jsonObj);
         return jsonObj.toString();
     }
